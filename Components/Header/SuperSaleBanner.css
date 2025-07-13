@@ -1,0 +1,43 @@
+.super-sale-banner {
+  position: relative;
+  border-radius: 12px;
+}
+
+.carousel-inner img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.sale-bottom-text {
+  position: absolute;
+  bottom: 15px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px 20px;
+  border-radius: 10px;
+  max-width: 70%;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+}
+
+.sale-bottom-text h2 {
+  font-size: 1.8rem;
+  margin: 0 0 8px 0;
+  color: #222;
+}
+
+.sale-bottom-text p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.category-link {
+  color: #5c3dff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.category-link:hover {
+  color: #d63384;
+  text-decoration: underline;
+}

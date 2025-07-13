@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🍽️ Kitchen Essentials</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+
+    header {
+      background-color: #8753d4;
+      padding: 12px 20px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-info {
+      font-size: 16px;
+      background-color: white;
+      color: #8753d4;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .search-box {
+      margin: 20px auto;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      padding: 40px 40px 100px 220px; /* padding-left to accommodate timer */
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .product {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .product img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .product img:hover {
+      transform: scale(1.15);
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    .price {
+      font-size: 15px;
+      color: #555;
+    }
+
+    button {
+      background-color: #8753d4;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #d10b74;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .remove-btn {
+      background: none;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .checkout-btn {
+      margin-top: 10px;
+      width: 100%;
+      background-color: #d10b74;
+      border: none;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .sale-timer {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      background-color: #fff5f8;
+      border-left: 5px solid #ff4081;
+      padding: 12px 16px 30px;
+      width: 230px;
+      font-size: 14px;
+      color: #d10b74;
+      font-weight: bold;
+      border-radius: 10px;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+    }
+
+    .sale-timer::after {
+      content: "✨💖🎉💅";
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      animation: sprinklePop 3s ease-in-out infinite;
+    }
+
+    @keyframes sprinklePop {
+      0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50% { transform: translateX(-50%) scale(1.15); opacity: 0.6; }
+    }
+
+    .bottom-brand-marquee {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      padding: 8px 0;
+      overflow: hidden;
+      border-top: 1px solid #eee;
+      z-index: 1000;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 60s linear infinite;
+    }
+
+    .marquee-track span {
+      display: inline-block;
+      margin: 0 25px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #8753d4;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @media (max-width: 600px) {
+      .bottom-brand-marquee {
+        display: none;
+      }
+    }
+    .sale-timer:hover {
+  transform: scale(1.1); /* Enlarge on hover */
+  font-size: 13.5px;
+}
+
+  .container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* FORCE exactly 5 columns */
+  gap: 30px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.rating {
+      font-size: 14px;
+      color: #d10b74;
+      margin: 5px 0;
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <div class="sale-timer">
+    ⏰ Hurry! Kitchen Deals End In:
+    <div id="countdown"></div>
+  </div>
+
+  <header>
+    🍽️ Kitchen Essentials – Cook with Class!
+    <div class="cart-info" onclick="toggleCart()">🛒 <span id="cart-count">0</span> items | ₹<span id="cart-total">0</span></div>
+  </header>
+
+  <input type="text" class="search-box" placeholder="🔍 Search kitchen items..." onkeyup="filterProducts(this.value)" />
+
+  <div class="cart-modal" id="cart-modal">
+    <h3>🛒 Your Cart</h3>
+    <div id="cart-items"></div>
+    <div class="cart-total">Total: ₹<span id="cart-modal-total">0</span></div>
+    <button class="checkout-btn" onclick="checkout()">Checkout</button>
+  </div>
+
+  <div class="container" id="product-container">
+
+    <div class="product" data-name="Stainless Steel Knife Set" data-price="999">
+  <img src="/assets/images/knife_set.webp" alt="Knife Set" />
+  <p class="title">Stainless Steel Knife Set</p>
+  <p class="rating">⭐ 4.7 (210 reviews)</p>
+  <p class="price">1 set<br>₹999</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Non-Stick Frying Pan" data-price="799">
+  <img src="/assets/images/frying_pan.jpg" alt="Frying Pan" />
+  <p class="title">Non-Stick Frying Pan</p>
+  <p class="rating">⭐ 4.4 (175 reviews)</p>
+  <p class="price">1 pc<br>₹799</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Spice Rack Organizer" data-price="499">
+  <img src="/assets/images/spice_rack.webp" alt="Spice Rack" />
+  <p class="title">Spice Rack Organizer</p>
+  <p class="rating">⭐ 4.6 (92 reviews)</p>
+  <p class="price">1 pc<br>₹499</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Chopping Board Set" data-price="599">
+  <img src="/assets/images/chopping_board.webp" alt="Chopping Board" />
+  <p class="title">Chopping Board Set</p>
+  <p class="rating">⭐ 4.3 (134 reviews)</p>
+  <p class="price">3 pcs<br>₹599</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Microwave Safe Bowls" data-price="399">
+  <img src="/assets/images/bowls.webp" alt="Bowls" />
+  <p class="title">Microwave Safe Bowls</p>
+  <p class="rating">⭐ 4.8 (304 reviews)</p>
+  <p class="price">4 pcs<br>₹399</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Silicone Cooking Spoon Set" data-price="349">
+  <img src="/assets/images/silicone_spoons.jpg" alt="Cooking Spoon Set" />
+  <p class="title">Silicone Cooking Spoon Set</p>
+  <p class="rating">⭐ 4.5 (122 reviews)</p>
+  <p class="price">5 pcs<br>₹349</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Electric Kettle 1.5L" data-price="1299">
+  <img src="/assets/images/kettle.jpg" alt="Electric Kettle" />
+  <p class="title">Electric Kettle 1.5L</p>
+  <p class="rating">⭐ 4.6 (267 reviews)</p>
+  <p class="price">1 pc<br>₹1299</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Lunch Box Tiffin Set" data-price="699">
+  <img src="/assets/images/lunchbox.webp" alt="Lunch Box Set" />
+  <p class="title">Lunch Box Tiffin Set</p>
+  <p class="rating">⭐ 4.2 (341 reviews)</p>
+  <p class="price">4 pcs<br>₹699</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Multipurpose Peeler Set" data-price="289">
+  <img src="/assets/images/peeler.jpg" alt="Peeler Set" />
+  <p class="title">Multipurpose Peeler Set</p>
+  <p class="rating">⭐ 4.4 (98 reviews)</p>
+  <p class="price">3 pcs<br>₹289</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Oil Dispenser Bottle" data-price="449">
+  <img src="/assets/images/oil_dispenser.webp" alt="Oil Dispenser" />
+  <p class="title">Oil Dispenser Bottle</p>
+  <p class="rating">⭐ 4.7 (176 reviews)</p>
+  <p class="price">2 pcs<br>₹449</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+
+  <div class="bottom-brand-marquee">
+    <div class="marquee-track">
+      <span>🥄 Prestige</span>
+      <span>🍲 Wonderchef</span>
+      <span>🍛 Pigeon</span>
+      <span>🍽️ Borosil</span>
+      <span>🍴 Cello</span>
+      <span>🍶 Milton</span>
+      <span>🥣 Hawkins</span>
+      <span>🍳 Tefal</span>
+      <span>🍕 Vinod Cookware</span>
+      <span>🧂 Butterfly</span>
+    </div>
+  </div>
+
+  <script>
+    const countdownElement = document.getElementById("countdown");
+    const saleEndDate = new Date("July 20, 2025 23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = saleEndDate - now;
+
+      if (distance < 0) {
+        countdownElement.innerHTML = "⏳ Offer expired!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    const cart = {};
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    function addToCart(button) {
+      const product = button.parentElement;
+      const name = product.getAttribute("data-name");
+      const price = parseInt(product.getAttribute("data-price"));
+
+      if (cart[name]) {
+        cart[name].qty += 1;
+      } else {
+        cart[name] = { price: price, qty: 1 };
+      }
+
+      totalItems++;
+      totalPrice += price;
+      updateCartUI();
+    }
+
+    function removeItem(name) {
+      if (cart[name]) {
+        totalItems -= cart[name].qty;
+        totalPrice -= cart[name].qty * cart[name].price;
+        delete cart[name];
+        updateCartUI();
+      }
+    }
+
+    function updateCartUI() {
+      document.getElementById("cart-count").textContent = totalItems;
+      document.getElementById("cart-total").textContent = totalPrice;
+      document.getElementById("cart-modal-total").textContent = totalPrice;
+
+      const cartItemsContainer = document.getElementById("cart-items");
+      cartItemsContainer.innerHTML = '';
+
+      for (let name in cart) {
+        const item = cart[name];
+        cartItemsContainer.innerHTML += `
+          <div class="cart-item">
+            <span><strong>${name}</strong></span>
+            <span>Qty: ${item.qty}</span>
+            <span>Price: ₹${item.price} × ${item.qty} = ₹${item.qty * item.price}</span>
+            <button class="remove-btn" onclick="removeItem('${name}')">❌ Remove</button>
+          </div>
+        `;
+      }
+    }
+
+    function toggleCart() {
+      const cartModal = document.getElementById("cart-modal");
+      cartModal.style.display = cartModal.style.display === "block" ? "none" : "block";
+    }
+
+    function checkout() {
+      if (totalItems === 0) {
+        alert("🛒 Your cart is empty!");
+      } else {
+        alert(`🧾 Thank you for your purchase!\nTotal items: ${totalItems}\nTotal: ₹${totalPrice}`);
+        for (let key in cart) delete cart[key];
+        totalItems = 0;
+        totalPrice = 0;
+        updateCartUI();
+        toggleCart();
+      }
+    }
+
+    function filterProducts(text) {
+      const search = text.toLowerCase();
+      const products = document.querySelectorAll(".product");
+      products.forEach(prod => {
+        const name = prod.getAttribute("data-name").toLowerCase();
+        prod.style.display = name.includes(search) ? "block" : "none";
+      });
+    }// 🧠 Keep your full script from previous file – countdown, cart handling, filter logic
+  </script>
+</body>
+</html>

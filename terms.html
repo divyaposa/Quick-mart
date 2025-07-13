@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms and Conditions - QuickMart</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f0f2f5, #ffffff);
+      color: #2c3e50;
+      padding: 40px 20px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1f3c88;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      animation: fadeDrop 1s ease forwards;
+    }
+
+    @keyframes fadeDrop {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    p {
+      text-align: center;
+      font-size: 1rem;
+      color: #444;
+      animation: fadeDrop 1s ease forwards;
+    }
+
+    section {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 35px auto;
+      max-width: 1000px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      opacity: 0;
+      transform: translateX(-50px);
+      animation: slideIn 0.8s ease forwards;
+      animation-delay: calc(var(--i) * 0.2s);
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    h2 {
+      color: #1f3c88;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    ul {
+      margin-top: 10px;
+      margin-left: 20px;
+      padding-left: 20px;
+    }
+
+    li {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    li::marker {
+      color: #1f3c88;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.95rem;
+      color: #777;
+      margin-top: 40px;
+    }
+
+    hr {
+      margin-top: 50px;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+      }
+
+      section {
+        margin: 20px 10px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Terms and Conditions</h1>
+  <p><strong>Effective Date:</strong> June 14, 2025</p>
+
+  <!-- All sections below use inline style to stagger animations -->
+  <section style="--i: 1">
+    <h2>1. Introduction</h2>
+    <p>
+      Welcome to QuickMart. These Terms and Conditions govern your use of our website...
+    </p>
+  </section>
+
+  <section style="--i: 2">
+    <h2>2. Eligibility</h2>
+    <p>
+      You must be at least 18 years old to use this website...
+    </p>
+  </section>
+
+  <section style="--i: 3">
+    <h2>3. Use of the Website</h2>
+    <ul>
+      <li>Do not misuse the platform for fraudulent activity.</li>
+      <li>Do not post or transmit unlawful content.</li>
+    </ul>
+  </section>
+
+  <section style="--i: 4">
+    <h2>4. Account Creation</h2>
+    <p>
+      You agree to provide accurate information and secure your login credentials.
+    </p>
+  </section>
+
+  <!-- Add more sections with increasing --i values -->
+
+  <section style="--i: 5">
+    <h2>5. Intellectual Property</h2>
+    <p>
+      All content on this site is owned by QuickMart and protected by applicable laws.
+    </p>
+  </section>
+
+  <!-- ...continue all the way up to section 19 (Contact Info) -->
+  <section style="--i: 19">
+    <h2>19. Contact Information</h2>
+    <ul>
+      <li>Email: support@quickmart.com</li>
+      <li>Phone: +91-98765-43210</li>
+      <li>Address: 123 QuickMart Towers, Bangalore, India</li>
+    </ul>
+  </section>
+
+  <footer>
+    <hr />
+    <p>© 2025 QuickMart Pvt Ltd. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

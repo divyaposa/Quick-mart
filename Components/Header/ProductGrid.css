@@ -1,0 +1,73 @@
+.product-img {
+  height: 220px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.product-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+.purple-button {
+  background-color: purple !important;
+  color: white !important;
+}
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.floating-box {
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.floating-box {
+  animation: floatEffect 5s ease-in-out infinite alternate;
+}
+
+@keyframes floatEffect {
+  0%   { transform: translate(0px, 0px); }
+  25%  { transform: translate(-5px, -10px); }
+  50%  { transform: translate(10px, -5px); }
+  75%  { transform: translate(-10px, 5px); }
+  100% { transform: translate(5px, 10px); }
+}
+
+.floating-benefits {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.floating-item {
+  display: inline-block;
+  font-size: 1.2rem;
+  color: #6a1b9a;
+  font-weight: bold;
+  animation: floatEffect 5s ease-in-out infinite;
+}
+
+@keyframes floatEffect {
+  0%   { transform: translateY(0px); }
+  25%  { transform: translateY(-5px); }
+  50%  { transform: translateY(5px); }
+  75%  { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
+}
+
+

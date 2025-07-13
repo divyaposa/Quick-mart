@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>✨Buy Beauty Products</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+
+    header {
+      background-color: #5d5db2;
+      padding: 10px 20px;
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .cart-info {
+      font-size: 16px;
+      background-color: white;
+      color: #5d5db2;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .search-box {
+      margin: 20px auto 0;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .product {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .product img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px 0 5px;
+      color: #333;
+    }
+
+    .price {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #5d5db2;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #d10b74;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    .cart-modal h3 {
+      margin-top: 0;
+      color: #5d5db2;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item span {
+      display: block;
+      font-size: 14px;
+      margin: 2px 0;
+    }
+
+    .cart-total {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: right;
+      color: #d10b74;
+    }
+
+    .remove-btn {
+      background: none;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .checkout-btn {
+      margin-top: 10px;
+      width: 100%;
+      background-color: #d10b74;
+      border: none;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 500px) {
+      header {
+        flex-direction: column;
+        font-size: 20px;
+        background-color: #ff69b4;
+      }
+    }
+    .brand-scroll {
+  position: fixed;
+  top: 70px;
+  width: 120px;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+  z-index: 998;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: whitesmoke;
+  pointer-events: none;
+}
+
+.brand-scroll-content {
+  display: flex;
+  flex-direction: column;
+  animation: scroll-vertical 60s linear infinite;
+}
+
+.brand-scroll-content span {
+  writing-mode: horizontal-tb;
+  transform: rotate(0deg);
+  font-size: 15px;
+  font-weight: bold;
+  color: grey;
+  margin: 12px 0;
+}
+
+.brand-scroll.left {
+  left: 10;
+}
+
+.brand-scroll.right {
+  right: 0;
+}
+
+@keyframes scroll-vertical {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+.sale-timer {
+  position: fixed;
+  top: 180px;
+  left: 120px;
+  background-color: #fff5f8;
+  border-left: 5px solid #ff4081;
+  padding: 15px;
+  width: 180px;
+  font-size: 14px;
+  color: #d10b74;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.05);
+  z-index: 998;
+}
+#countdown {
+  font-size: 16px;
+  color: #5d5db2;
+  margin-top: 6px;
+}
+.sale-timer {
+  position: fixed;
+  top: 150px;
+  left: 30px; /* ⬅ Shifted further to the left */
+  background-color: #fff5f8;
+  border-left: 5px solid #ff4081;
+  padding: 15px 15px 30px; /* ⬇ Extra space for sprinkles */
+  width: 180px;
+  font-size: 14px;
+  color: #d10b74;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.sale-timer::after {
+  content: "✨🎉💅💖";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  animation: sprinklePop 2s ease-in-out infinite;
+}
+
+@keyframes sprinklePop {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50% { transform: translateX(-50%) scale(1.2); opacity: 0.7; }
+}
+.sale-timer {
+  position: fixed;
+  top: 120px;
+  left: 20px;
+  background-color: #fff5f8;
+  border-left: 5px solid #ff4081;
+  padding: 12px 14px 30px;
+  width: 180px;
+  font-size: 14px;
+  color: #d10b74;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.sale-timer::after {
+  content: "✨💖🎉💅";
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  animation: sprinklePop 3s ease-in-out infinite;
+}
+
+@keyframes sprinklePop {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50% { transform: translateX(-50%) scale(1.15); opacity: 0.6; }
+}
+.bottom-brand-marquee {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 8px 0;
+  overflow: hidden;
+  border-top: 1px solid #eee;
+  z-index: 1000;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-left 60s linear infinite;
+}
+
+.marquee-track span {
+  display: inline-block;
+  margin: 0 25px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #5d5db2;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.sale-timer {
+  position: fixed;
+  top: 80px; /* moved further up */
+  left: 20px;
+  background-color: #fff5f8;
+  border-left: 5px solid #ff4081;
+  padding: 8px 12px 24px;
+  width: 170px;
+  font-size: 14px; /* smaller font */
+  color: #d10b74;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  transition: transform 0.3s ease, font-size 0.3s ease;
+}
+
+.sale-timer:hover {
+  transform: scale(1.1); /* Enlarge on hover */
+  font-size: 13.5px;
+}
+.sale-timer::after {
+  content: "✨💖🎉💅";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  animation: sprinklePop 3s ease-in-out infinite;
+}
+.product img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.product img:hover {
+  transform: scale(1.15); /* Only image enlarges on hover */
+}
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* fixed 5 columns */
+    gap: 30px;
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+.product {
+  background-color: white;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.product img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+.title {
+  font-size: 15px;
+  margin: 8px 0 3px;
+  font-weight: bold;
+  color: #333;
+}
+
+.price {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.rating {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+.rating {
+      font-size: 14px;
+      color: #d10b74;
+      margin: 5px 0;
+    }
+
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="sale-timer">
+  ⏰ Hurry! Offer ends in:
+  <div id="countdown"></div>
+</div>
+
+
+  <header>
+    <!-- LEFT vertical scroll -->
+
+
+
+
+    💄Beauty Begins Here – Shop the Latest Trends!
+    <div class="cart-info" onclick="toggleCart()">🛒 <span id="cart-count">0</span> items | ₹<span id="cart-total">0</span></div>
+  </header>
+
+  <!-- 🔍 Search -->
+  <input type="text" class="search-box" placeholder="🔍 Search products..." onkeyup="filterProducts(this.value)" />
+
+  <!-- 🛒 Cart Modal -->
+  <div class="cart-modal" id="cart-modal">
+    <h3>🛍️ Your Cart</h3>
+    <div id="cart-items"></div>
+    <div class="cart-total">Total: ₹<span id="cart-modal-total">0</span></div>
+    <button class="checkout-btn" onclick="checkout()">🧾 Checkout</button>
+    
+  </div>
+
+  <!-- 🧴 Product Container -->
+  <div class="container" id="product-container">
+    <div class="product" data-name="Lakmé Lipstick" data-price="299">
+      <img src="/assets/images/lipstick.webp" alt="Lipstick" />
+      <p class="title">Lakmé Lipstick</p>
+      <p class="rating">⭐ 4.5 (243 reviews)</p>
+      <p class="price"></p>
+        <p><bold>₹299</bold></p>
+      
+      <button onclick="addToCart(this)">ADD</button>
+    </div>
+
+    <div class="product" data-name="Nivea Facewash" data-price="159">
+      <img src="/assets/images/facewash.webp" alt="Facewash" />
+      <p class="title">Nivea Facewash</p>
+       <p class="rating">⭐ 4.7 (349 reviews)</p>
+      <p class="price"><bold>₹159</bold></p>
+      <button onclick="addToCart(this)">ADD</button>
+    </div>
+
+    <div class="product" data-name="Maybelline Foundation" data-price="449">
+      <img src="/assets/images/foundation.jpg" alt="Foundation" />
+      <p class="title">Maybelline Foundation</p>
+      <p class="rating">⭐ 4.9 (7 reviews)</p>
+      <p class="price"><bold>₹449</bold></p>
+      <button onclick="addToCart(this)">ADD</button>
+    </div>
+
+      <div class="product" data-name="Lakmé Compact" data-price="179">
+  <img src="/assets/images/compact.jpg" alt="Compact" />
+  <p class="title">Lakmé Compact</p>
+         <p class="rating">⭐ 4.4 (190 reviews)</p>
+  <p class="price"><br>₹179</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Rare Beauty Lipstick" data-price="2000">
+  <img src="/assets/images/rare.jpg" alt="Rare Beauty Lipstick" />
+  <p class="title">Rare Beauty Lipstick</p>
+         <p class="rating">⭐ 3.7 (5 reviews)</p>
+  <p class="price"><bold>₹2000</bold></p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Elf Liquid Filter" data-price="2500">
+  <img src="/assets/images/line.jpg" alt="Elf liquid filter" />
+  <p class="title">Elf Liquid Filter</p>
+  <p class="rating">⭐ 4.4 (98 reviews)</p>
+  <p class="price"><bold>₹2500</bold></p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Roller Liner" data-price="350">
+  <img src="/assets/images/eyeliner.png" alt="Eyeliner" />
+  <p class="title">Roller Liner</p>
+  <p class="rating">⭐ 4.6 (361 reviews)</p>
+  <p class="price"><bold>₹350</bold></p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Glowy Makeup Serum" data-price="1500">
+  <img src="/assets/images/serum.webp" alt="Serum" />
+  <p class="title">Glowy Makeup Serum</p>
+  <p class="rating">⭐ 4.9 (48 reviews)</p>
+  <p class="price"><bold>₹1500</bold></p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Kiro Concealer" data-price="2500">
+  <img src="/assets/images/kiro.jpg" alt="Kiro" />
+  <p class="title">Kiro Concealer</p>
+    <p class="rating">⭐ 4.7 (368 reviews)</p>
+  <p class="price"><bold>₹2500</bold></p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Swiss Beauty Blush" data-price="3000">
+  <img src="/assets/images/blush.jpg" alt="Blush" />
+  <p class="title">Swiss Beauty Blush</p>
+    <p class="rating">⭐ 4.4 (156 reviews)</p>
+  <p class="price"><bold>₹3000</bold></p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+
+  <script>
+    const countdownElement = document.getElementById("countdown");
+
+// Set your offer end date here
+const saleEndDate = new Date("July 20, 2025 23:59:59").getTime();
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = saleEndDate - now;
+
+  if (distance < 0) {
+    countdownElement.innerHTML = "⏳ Offer expired!";
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+    const cart = {};
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    function addToCart(button) {
+      const product = button.parentElement;
+      const name = product.getAttribute("data-name");
+      const price = parseInt(product.getAttribute("data-price"));
+
+      if (cart[name]) {
+        cart[name].qty += 1;
+      } else {
+        cart[name] = { price: price, qty: 1 };
+      }
+
+      totalItems++;
+      totalPrice += price;
+
+      updateCartUI();
+    }
+
+    function removeItem(name) {
+      if (cart[name]) {
+        totalItems -= cart[name].qty;
+        totalPrice -= cart[name].qty * cart[name].price;
+        delete cart[name];
+        updateCartUI();
+      }
+    }
+
+    function updateCartUI() {
+      document.getElementById("cart-count").textContent = totalItems;
+      document.getElementById("cart-total").textContent = totalPrice;
+      document.getElementById("cart-modal-total").textContent = totalPrice;
+
+      const cartItemsContainer = document.getElementById("cart-items");
+      cartItemsContainer.innerHTML = '';
+
+      for (let name in cart) {
+        const item = cart[name];
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('cart-item');
+        itemDiv.innerHTML = `
+          <span><strong>${name}</strong></span>
+          <span>Qty: ${item.qty}</span>
+          <span>Price: ₹${item.price} × ${item.qty} = ₹${item.qty * item.price}</span>
+          <button class="remove-btn" onclick="removeItem('${name}')">❌ Remove</button>
+        `;
+        cartItemsContainer.appendChild(itemDiv);
+      }
+    }
+
+    function toggleCart() {
+      const cartModal = document.getElementById("cart-modal");
+      cartModal.style.display = cartModal.style.display === "block" ? "none" : "block";
+    }
+
+    function checkout() {
+      if (totalItems === 0) {
+        alert("Your cart is empty!");
+      } else {
+        alert(`🧾 Thank you for your purchase!\nTotal items: ${totalItems}\nTotal price: ₹${totalPrice}`);
+        // Clear cart
+        Object.keys(cart).forEach(key => delete cart[key]);
+        totalItems = 0;
+        totalPrice = 0;
+        updateCartUI();
+        toggleCart();
+      }
+    }
+
+    function filterProducts(text) {
+      const search = text.toLowerCase();
+      const products = document.querySelectorAll(".product");
+
+      products.forEach(prod => {
+        const name = prod.getAttribute("data-name").toLowerCase();
+        prod.style.display = name.includes(search) ? "block" : "none";
+      });
+    }
+    // Countdown to 13 days from now
+const offerEnd = new Date();
+offerEnd.setDate(offerEnd.getDate() + 13);
+
+function updateTimer() {
+  const now = new Date();
+  const diff = offerEnd - now;
+
+  if (diff <= 0) {
+    document.getElementById("timer").innerText = "Expired!";
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById("timer").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+setInterval(updateTimer, 1000);
+updateTimer(); // Initial call
+
+  </script>
+
+<!-- Floating brand marquee bar -->
+<div class="bottom-brand-marquee">
+  <div class="marquee-track">
+    <span>💄 Maybelline</span>
+    <span>💋 Lakmé</span>
+    <span>🧴 L'Oréal</span>
+    <span>💎 Rare Beauty</span>
+    <span>✨ ELF</span>
+    <span>🌿 Biotique</span>
+    <span>🌸 Swiss Beauty</span>
+    <span>🧽 Kiro</span>
+    <span>🍯 Mamaearth</span>
+    <span>🧃 FACES</span>
+    <span>💧 Neutrogena</span>
+    <span>💄 Maybelline</span> <!-- repeat again for smooth loop -->
+    <span>💋 Lakmé</span>
+    <span>🧴 L'Oréal</span>
+    <span>💎 Rare Beauty</span>
+    <span>✨ ELF</span>
+    <span>🌿 Biotique</span>
+    <span>🌸 Swiss Beauty</span>
+    <span>🧽 Kiro</span>
+    <span>🍯 Mamaearth</span>
+    <span>🧃 FACES</span>
+    <span>💧 Neutrogena</span>
+  </div>
+</div>
+
+</body>
+</html>

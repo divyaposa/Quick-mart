@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>✨Buy Footwear Online</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+
+    header {
+      background-color: #5d5db2;
+      padding: 10px 20px;
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .cart-info {
+      font-size: 16px;
+      background-color: white;
+      color: #5d5db2;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .search-box {
+      margin: 20px auto 0;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+      padding: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .product {
+      background-color: white;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    }
+
+    .product img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .product img:hover {
+      transform: scale(1.15);
+    }
+
+    .title {
+      font-size: 15px;
+      margin: 8px 0 3px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .price {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .rating {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    button {
+      background-color: #5d5db2;
+      color: white;
+      border: none;
+      padding: 6px 18px;
+      border-radius: 18px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #d10b74;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    .cart-modal h3 {
+      margin-top: 0;
+      color: #5d5db2;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-total {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: right;
+      color: #d10b74;
+    }
+
+    .remove-btn {
+      background: none;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .checkout-btn {
+      margin-top: 10px;
+      width: 100%;
+      background-color: #d10b74;
+      border: none;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .bottom-brand-marquee {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      padding: 8px 0;
+      overflow: hidden;
+      border-top: 1px solid #eee;
+      z-index: 1000;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 60s linear infinite;
+    }
+
+    .marquee-track span {
+      display: inline-block;
+      margin: 0 25px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #5d5db2;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .sale-timer {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      background-color: #fff5f8;
+      border-left: 5px solid #ff4081;
+      padding: 8px 12px 24px;
+      width: 170px;
+      font-size: 12px;
+      color: #d10b74;
+      font-weight: bold;
+      border-radius: 10px;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+    }
+    .sale-timer {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background-color: #fff5f8;
+  border-left: 5px solid #ff4081;
+  padding: 8px 12px 24px;
+  width: 180px;
+  font-size: 14px;
+  color: #d10b74;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  transition: transform 0.3s ease, font-size 0.3s ease;
+}
+
+.sale-timer:hover {
+  transform: scale(1.1);
+  font-size: 13.5px;
+}
+
+.sale-timer::after {
+  content: "✨💖🎉💅";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  animation: sprinklePop 3s ease-in-out infinite;
+}
+
+@keyframes sprinklePop {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50% { transform: translateX(-50%) scale(1.15); opacity: 0.6; }
+}
+.rating {
+      font-size: 14px;
+      color: #d10b74;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="sale-timer">
+  ⏰ Hurry! Offer ends in:
+  <div id="countdown"></div>
+</div>
+
+
+  <header>
+    <div style="text-align: center; margin-top: 10px;">
+  <button onclick="filterByCategory('all')">All</button>
+  <button onclick="filterByCategory('men')">Men</button>
+  <button onclick="filterByCategory('women')">Women</button>
+</div>
+
+    👟 Step Into Style – Explore the Latest Footwear!
+    <div class="cart-info" onclick="toggleCart()">🛒 <span id="cart-count">0</span> items | ₹<span id="cart-total">0</span></div>
+  </header>
+
+  <input type="text" class="search-box" placeholder="🔍 Search footwear..." onkeyup="filterProducts(this.value)" />
+
+  <div class="cart-modal" id="cart-modal">
+    <h3>🛍️ Your Cart</h3>
+    <div id="cart-items"></div>
+    <div class="cart-total">Total: ₹<span id="cart-modal-total">0</span></div>
+    <button class="checkout-btn" onclick="checkout()">🧾 Checkout</button>
+  </div>
+
+  <div class="container" id="product-container">
+    <!-- Example footwear products -->
+    <div class="product" data-name="Nike Air Max" data-price="5999" data-category="men">
+      <img src="/assets/images/nike.jpg" alt="Nike Air Max" />
+      <p class="title">Nike Air Max</p>
+      <p class="rating">⭐ 4.8 (412 reviews)</p>
+      <p class="price">₹5999</p>
+      <button onclick="addToCart(this)">ADD</button>
+    </div>
+
+    <div class="product" data-name="Adidas UltraBoost" data-price="7499" data-category="men">
+      <img src="/assets/images/adidas.webp" alt="Adidas UltraBoost" />
+      <p class="title">Adidas UltraBoost</p>
+      <p class="rating">⭐ 4.7 (523 reviews)</p>
+      <p class="price">₹7499</p>
+      <button onclick="addToCart(this)">ADD</button>
+    </div>
+
+    <div class="product" data-name="Puma Sneakers" data-price="3499" data-category="men">
+      <img src="/assets/images/puma.webp" alt="Puma Sneakers" />
+      <p class="title">Puma Sneakers</p>
+      <p class="rating">⭐ 4.6 (267 reviews)</p>
+      <p class="price">₹3499</p>
+      <button onclick="addToCart(this)">ADD</button>
+    </div>
+    <!-- Men's Footwear -->
+<div class="product" data-name="Woodland Boots" data-price="4999" data-category="men">
+  <img src="/assets/images/woodland.jpg" alt="Woodland Boots" />
+  <p class="title">Woodland Boots</p>
+  <p class="rating">⭐ 4.6 (112 reviews)</p>
+  <p class="price">₹4999</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Campus Sports Shoes" data-price="1999" data-category="men">
+  <img src="/assets/images/campus.webp" alt="Campus Sports Shoes" />
+  <p class="title">Campus Sports Shoes</p>
+  <p class="rating">⭐ 4.2 (190 reviews)</p>
+  <p class="price">₹1999</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Red Tape Loafers" data-price="2799" data-category="men">
+  <img src="/assets/images/redtape.webp" alt="Red Tape Loafers" />
+  <p class="title">Red Tape Loafers</p>
+  <p class="rating">⭐ 4.5 (143 reviews)</p>
+  <p class="price">₹2799</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<!-- Women's Footwear -->
+<div class="product" data-name="Catwalk Heels" data-price="2299" data-category="women">
+  <img src="/assets/images/catwalk.jpg" alt="Catwalk Heels" />
+  <p class="title">Catwalk Heels</p>
+  <p class="rating">⭐ 4.4 (134 reviews)</p>
+  <p class="price">₹2299</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Metro Sandals" data-price="1499" data-category="women">
+  <img src="/assets/images/metro.jpg" alt="Metro Sandals" />
+  <p class="title">Metro Sandals</p>
+  <p class="rating">⭐ 4.3 (112 reviews)</p>
+  <p class="price">₹1499</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Crocs Women Slides" data-price="1699" data-category="women">
+  <img src="/assets/images/crocs-women.jpg" alt="Crocs Women Slides" />
+  <p class="title">Crocs Women Slides</p>
+  <p class="rating">⭐ 4.6 (230 reviews)</p>
+  <p class="price">₹1699</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+<div class="product" data-name="gold stiletto pumps" data-price="3999" data-category="women">
+  <img src="/assets/images/p1.avif" alt="Skechers D'Lites" />
+  <p class="title">gold stiletto pumps</p>
+  <p class="rating">⭐ 4.8 (276 reviews)</p>
+  <p class="price">₹3999</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+<!-- Men's Footwear -->
+<div class="product" data-name="Sparx Sports Shoes" data-price="1699" data-category="men">
+  <img src="/assets/images/sparx-sports.jpg" alt="Sparx Sports Shoes" />
+  <p class="title">Sparx Sports Shoes</p>
+  <p class="rating">⭐ 4.4 (342 reviews)</p>
+  <p class="price">₹1699</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Campus Max Sneakers" data-price="1499" data-category="men">
+  <img src="/assets/images/campus-max.jpg" alt="Campus Max Sneakers" />
+  <p class="title">Campus Max Sneakers</p>
+  <p class="rating">⭐ 4.2 (125 reviews)</p>
+  <p class="price">₹1499</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<!-- Women's Footwear -->
+<div class="product" data-name="Bata Flat Sandals" data-price="899" data-category="women">
+  <img src="/assets/images/bata-sandals.jpg" alt="Bata Flat Sandals" />
+  <p class="title">Bata Flat Sandals</p>
+  <p class="rating">⭐ 4.5 (244 reviews)</p>
+  <p class="price">₹899</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+<div class="product" data-name="Metro Ballerinas" data-price="1799" data-category="women">
+  <img src="/assets/images/metro-ballerina.jpg" alt="Metro Ballerinas" />
+  <p class="title">Metro Ballerinas</p>
+  <p class="rating">⭐ 4.7 (321 reviews)</p>
+  <p class="price">₹1799</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+<div class="product" data-name="Elegant Black Heels" data-price="2199" data-category="women">
+  <img src="/assets/images/black-heels.jpg" alt="Elegant Black Heels" />
+  <p class="title">Elegant Black Heels</p>
+  <p class="rating">⭐ 4.7 (182 reviews)</p>
+  <p class="price">₹2199</p>
+  <button onclick="addToCart(this)">ADD</button>
+</div>
+
+  <div class="bottom-brand-marquee">
+    <div class="marquee-track">
+      <span>👟 Nike</span>
+<span>🥾 Adidas</span>
+<span>👞 Woodland</span>
+<span>🥿 Bata</span>
+<span>🩴 Crocs</span>
+<span>👠 Red Tape</span>
+<span>👟 Puma</span>
+<span>👞 Lee Cooper</span>
+<span>👡 Campus</span>
+<span>👟 Reebok</span>
+<span>🥿 Skechers</span>
+<span>👞 Hush Puppies</span>
+<span>👠 Clarks</span>
+<span>👟 New Balance</span>
+<span>🥾 Fila</span>
+<span>👞 Liberty</span>
+<span>👡 Mochi</span>
+<span>👠 Metro</span>
+<span>🥿 Relaxo</span>
+<span>👞 Action</span>
+
+    </div>
+  </div>
+
+  <script>
+    function filterByCategory(category) {
+  const products = document.querySelectorAll(".product");
+
+  products.forEach(prod => {
+    const productCategory = prod.getAttribute("data-category");
+    if (category === "all" || productCategory === category) {
+      prod.style.display = "block";
+    } else {
+      prod.style.display = "none";
+    }
+  });
+}
+
+    const countdownElement = document.getElementById("countdown");
+    const saleEndDate = new Date("July 20, 2025 23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = saleEndDate - now;
+
+      if (distance < 0) {
+        countdownElement.innerHTML = "⏳ Offer expired!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    const cart = {};
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    function addToCart(button) {
+      const product = button.parentElement;
+      const name = product.getAttribute("data-name");
+      const price = parseInt(product.getAttribute("data-price"));
+
+      if (cart[name]) {
+        cart[name].qty += 1;
+      } else {
+        cart[name] = { price: price, qty: 1 };
+      }
+
+      totalItems++;
+      totalPrice += price;
+
+      updateCartUI();
+    }
+
+    function removeItem(name) {
+      if (cart[name]) {
+        totalItems -= cart[name].qty;
+        totalPrice -= cart[name].qty * cart[name].price;
+        delete cart[name];
+        updateCartUI();
+      }
+    }
+
+    function updateCartUI() {
+      document.getElementById("cart-count").textContent = totalItems;
+      document.getElementById("cart-total").textContent = totalPrice;
+      document.getElementById("cart-modal-total").textContent = totalPrice;
+
+      const cartItemsContainer = document.getElementById("cart-items");
+      cartItemsContainer.innerHTML = '';
+
+      for (let name in cart) {
+        const item = cart[name];
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('cart-item');
+        itemDiv.innerHTML = `
+          <span><strong>${name}</strong></span>
+          <span>Qty: ${item.qty}</span>
+          <span>Price: ₹${item.price} × ${item.qty} = ₹${item.qty * item.price}</span>
+          <button class="remove-btn" onclick="removeItem('${name}')">❌ Remove</button>
+        `;
+        cartItemsContainer.appendChild(itemDiv);
+      }
+    }
+
+    function toggleCart() {
+      const cartModal = document.getElementById("cart-modal");
+      cartModal.style.display = cartModal.style.display === "block" ? "none" : "block";
+    }
+
+    function checkout() {
+      if (totalItems === 0) {
+        alert("Your cart is empty!");
+      } else {
+        alert(`🧾 Thank you for your purchase!\nTotal items: ${totalItems}\nTotal price: ₹${totalPrice}`);
+        Object.keys(cart).forEach(key => delete cart[key]);
+        totalItems = 0;
+        totalPrice = 0;
+        updateCartUI();
+        toggleCart();
+      }
+    }
+
+    function filterProducts(text) {
+      const search = text.toLowerCase();
+      const products = document.querySelectorAll(".product");
+
+      products.forEach(prod => {
+        const name = prod.getAttribute("data-name").toLowerCase();
+        prod.style.display = name.includes(search) ? "block" : "none";
+      });
+    }
+    
+  </script>
+</body>
+</html>

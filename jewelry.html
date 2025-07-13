@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💍 Sparkle in Style - Jewelry</title>
+ 
+  <style>
+     body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+
+    header {
+      background-color: #8753d4;
+      padding: 12px 20px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-info {
+      font-size: 16px;
+      background-color: white;
+      color: #8753d4;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .search-box {
+      margin: 20px auto;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      padding: 40px 40px 100px 220px; /* padding-left to accommodate timer */
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .product {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .product img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .product img:hover {
+      transform: scale(1.15);
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    .price {
+      font-size: 15px;
+      color: #555;
+    }
+
+    button {
+      background-color: #8753d4;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #d10b74;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .remove-btn {
+      background: none;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .checkout-btn {
+      margin-top: 10px;
+      width: 100%;
+      background-color: #d10b74;
+      border: none;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .sale-timer {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      background-color: #fff5f8;
+      border-left: 5px solid #ff4081;
+      padding: 12px 16px 30px;
+      width: 230px;
+      font-size: 14px;
+      color: #d10b74;
+      font-weight: bold;
+      border-radius: 10px;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+    }
+
+    .sale-timer::after {
+      content: "✨💖🎉💅";
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      animation: sprinklePop 3s ease-in-out infinite;
+    }
+
+    @keyframes sprinklePop {
+      0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50% { transform: translateX(-50%) scale(1.15); opacity: 0.6; }
+    }
+
+    .bottom-brand-marquee {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      padding: 8px 0;
+      overflow: hidden;
+      border-top: 1px solid #eee;
+      z-index: 1000;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 60s linear infinite;
+    }
+
+    .marquee-track span {
+      display: inline-block;
+      margin: 0 25px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #8753d4;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @media (max-width: 600px) {
+      .bottom-brand-marquee {
+        display: none;
+      }
+    }
+    .sale-timer:hover {
+  transform: scale(1.1); /* Enlarge on hover */
+  font-size: 13.5px;
+}
+
+  .container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* FORCE exactly 5 columns */
+  gap: 30px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.rating {
+      font-size: 14px;
+      color: #d10b74;
+      margin: 5px 0;
+    }
+
+  </style>
+  
+</head>
+<body>
+
+  <div class="sale-timer">
+    ⏰ Shine bright! Offer ends in:
+    <div id="countdown"></div>
+  </div>
+
+  <header>
+    💍 Sparkle in Style – Discover Dazzling Jewelry!
+    <div class="cart-info" onclick="toggleCart()">🛒 <span id="cart-count">0</span> items | ₹<span id="cart-total">0</span></div>
+  </header>
+
+  <input type="text" class="search-box" placeholder="🔍 Search jewelry..." onkeyup="filterProducts(this.value)" />
+
+  <div class="cart-modal" id="cart-modal">
+    <h3>💎 Your Cart</h3>
+    <div id="cart-items"></div>
+    <div class="cart-total">Total: ₹<span id="cart-modal-total">0</span></div>
+    <button class="checkout-btn" onclick="checkout()">Checkout</button>
+  </div>
+
+  <div class="container" id="product-container">
+  <!-- Heavy Jewelry Products -->
+  <div class="product" data-name="Royal Kundan Bridal Set" data-price="6999">
+    <img src="/assets/images/kundan-bridal.webp" alt="Royal Kundan" />
+    <p class="title">Royal Kundan Bridal Set</p>
+    <p class="rating">⭐ 4.9 (842 reviews)</p>
+    <p class="price">1 set<br>₹6999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Antique Temple Necklace" data-price="5499">
+    <img src="/assets/images/temple-necklace.webp" alt="Temple Necklace" />
+    <p class="title">Antique Temple Necklace</p>
+    <p class="rating">⭐ 4.8 (624 reviews)</p>
+    <p class="price">1 pc<br>₹5499</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Polki Diamond Choker" data-price="7999">
+    <img src="/assets/images/polki-choker.jpg" alt="Polki Choker" />
+    <p class="title">Polki Diamond Choker</p>
+    <p class="rating">⭐ 4.7 (412 reviews)</p>
+    <p class="price">1 pc<br>₹7999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Rajasthani Borla Maang Tikka" data-price="1599">
+    <img src="/assets/images/borla.webp" alt="Borla Tikka" />
+    <p class="title">Rajasthani Borla Maang Tikka</p>
+    <p class="rating">⭐ 4.6 (339 reviews)</p>
+    <p class="price">1 pc<br>₹1599</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Heritage Pearl Haram" data-price="5999">
+    <img src="/assets/images/pearl-haram.jpg" alt="Pearl Haram" />
+    <p class="title">Heritage Pearl Haram</p>
+    <p class="rating">⭐ 4.9 (488 reviews)</p>
+    <p class="price">1 pc<br>₹5999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="product" data-name="Mughal Emerald Jhumkas" data-price="2599">
+    <img src="/assets/images/emerald-jhumkas.webp" alt="Jhumkas" />
+    <p class="title">Mughal Emerald Jhumkas</p>
+    <p class="rating">⭐ 4.5 (517 reviews)</p>
+    <p class="price">1 pair<br>₹2599</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Meenakari Bridal Nose Ring" data-price="999">
+    <img src="/assets/images/nose-ring.webp" alt="Nose Ring" />
+    <p class="title">Meenakari Bridal Nose Ring</p>
+    <p class="rating">⭐ 4.7 (320 reviews)</p>
+    <p class="price">1 pc<br>₹999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Gold Plated Waist Belt (Vaddanam)" data-price="4499">
+    <img src="/assets/images/vaddanam.webp" alt="Vaddanam" />
+    <p class="title">Gold Plated Waist Belt (Vaddanam)</p>
+    <p class="rating">⭐ 4.6 (275 reviews)</p>
+    <p class="price">1 pc<br>₹4499</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Rajputi Matha Patti" data-price="1799">
+    <img src="/assets/images/matha-patti.webp" alt="Matha Patti" />
+    <p class="title">Rajputi Matha Patti</p>
+    <p class="rating">⭐ 4.8 (407 reviews)</p>
+    <p class="price">1 pc<br>₹1799</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Oxidized Silver Bridal Set" data-price="3799">
+    <img src="/assets/images/oxidized-set.jpg" alt="Oxidized Jewelry" />
+    <p class="title">Oxidized Silver Bridal Set</p>
+    <p class="rating">⭐ 4.7 (560 reviews)</p>
+    <p class="price">1 set<br>₹3799</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+</div>
+
+
+  <div class="bottom-brand-marquee">
+    <div class="marquee-track">
+     <span>💎 Tanishq</span>
+<span>✨ Voylla</span>
+<span>🌟 Giva</span>
+<span>💍 Zaveri Pearls</span>
+<span>🔮 Swarovski</span>
+<span>🌸 Tribe Amrapali</span>
+<span>👑 Kalyan Jewellers</span>
+<span>🌺 Malabar Gold</span>
+<span>🏵️ Senco Gold</span>
+<span>🕉️ GRT Jewellers</span>
+<span>🔱 Khazana Jewellers</span>
+<span>💠 TBZ</span>
+<span>🪷 PP Jewellers</span>
+<span>🧿 Joyalukkas</span>
+
+    </div>
+  </div>
+
+  <script>
+    const countdownElement = document.getElementById("countdown");
+    const saleEndDate = new Date("July 20, 2025 23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = saleEndDate - now;
+
+      if (distance < 0) {
+        countdownElement.innerHTML = "⏳ Offer expired!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    const cart = {};
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    function addToCart(button) {
+      const product = button.parentElement;
+      const name = product.getAttribute("data-name");
+      const price = parseInt(product.getAttribute("data-price"));
+
+      if (cart[name]) {
+        cart[name].qty += 1;
+      } else {
+        cart[name] = { price: price, qty: 1 };
+      }
+
+      totalItems++;
+      totalPrice += price;
+      updateCartUI();
+    }
+
+    function removeItem(name) {
+      if (cart[name]) {
+        totalItems -= cart[name].qty;
+        totalPrice -= cart[name].qty * cart[name].price;
+        delete cart[name];
+        updateCartUI();
+      }
+    }
+
+    function updateCartUI() {
+      document.getElementById("cart-count").textContent = totalItems;
+      document.getElementById("cart-total").textContent = totalPrice;
+      document.getElementById("cart-modal-total").textContent = totalPrice;
+
+      const cartItemsContainer = document.getElementById("cart-items");
+      cartItemsContainer.innerHTML = '';
+
+      for (let name in cart) {
+        const item = cart[name];
+        cartItemsContainer.innerHTML += `
+          <div class="cart-item">
+            <span><strong>${name}</strong></span>
+            <span>Qty: ${item.qty}</span>
+            <span>Price: ₹${item.price} × ${item.qty} = ₹${item.qty * item.price}</span>
+            <button class="remove-btn" onclick="removeItem('${name}')">❌ Remove</button>
+          </div>
+        `;
+      }
+    }
+
+    function toggleCart() {
+      const cartModal = document.getElementById("cart-modal");
+      cartModal.style.display = cartModal.style.display === "block" ? "none" : "block";
+    }
+
+    function checkout() {
+      if (totalItems === 0) {
+        alert("🛒 Your cart is empty!");
+      } else {
+        alert(`🧾 Thank you for your purchase!\nTotal items: ${totalItems}\nTotal: ₹${totalPrice}`);
+        for (let key in cart) delete cart[key];
+        totalItems = 0;
+        totalPrice = 0;
+        updateCartUI();
+        toggleCart();
+      }
+    }
+
+    function filterProducts(text) {
+      const search = text.toLowerCase();
+      const products = document.querySelectorAll(".product");
+      products.forEach(prod => {
+        const name = prod.getAttribute("data-name").toLowerCase();
+        prod.style.display = name.includes(search) ? "block" : "none";
+      });
+    }// Same JavaScript functions as in your handbags page
+    // (countdown timer, cart add/remove, filter, etc.)
+    // Just copy/paste the script from above without changes
+  </script>
+
+</body>
+</html>

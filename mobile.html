@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>📱 Mobile Deals</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+
+    header {
+      background-color: #8753d4;
+      padding: 12px 20px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .cart-info {
+      font-size: 16px;
+      background-color: white;
+      color: #8753d4;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .search-box {
+      margin: 20px auto;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+      padding: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    .price {
+      font-size: 15px;
+      color: #555;
+    }
+
+    .rating {
+      font-size: 14px;
+      color: #8753d4;
+      margin: 5px 0;
+    }
+
+    button {
+      background-color: #8753d4;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #d10b74;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .remove-btn {
+      background: none;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .checkout-btn {
+      margin-top: 10px;
+      width: 100%;
+      background-color: #d10b74;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+
+    .bottom-brand-marquee {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      padding: 8px 0;
+      overflow: hidden;
+      border-top: 1px solid #eee;
+      z-index: 1000;
+    }
+
+    .marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 60s linear infinite;
+    }
+
+    .marquee-track span {
+      display: inline-block;
+      margin: 0 25px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .sale-timer {
+      position: fixed;
+      top: 90px;
+      left: 20px;
+      background-color: #fff5f8;
+      border-left: 5px solid #d10b74;
+      padding: 12px 16px 30px;
+      width: 230px;
+      font-size: 14px;
+      color: #d10b74;
+      font-weight: bold;
+      border-radius: 10px;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+    }
+
+    .sale-timer::after {
+      content: "📱⚡🔥";
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      animation: sprinklePop 3s ease-in-out infinite;
+    }
+
+    @keyframes sprinklePop {
+      0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50% { transform: translateX(-50%) scale(1.15); opacity: 0.6; }
+    }
+
+    @media (max-width: 800px) {
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 20px;
+      }
+      .sale-timer {
+        display: none;
+      }
+    }
+    .product {
+      background-color: white;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .product img {
+        padding: 10px 10px 10px 15px;
+      width: 200px;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .product img:hover {
+      transform: scale(1.15);
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="sale-timer">
+  ⏰ Mobile Sale Ends In:
+  <div id="countdown"></div>
+</div>
+
+<header>
+  📱 Mobile Deals
+  <div class="cart-info" onclick="toggleCart()">🛒 <span id="cart-count">0</span> items | ₹<span id="cart-total">0</span></div>
+</header>
+
+<input type="text" class="search-box" placeholder="🔍 Search phones..." onkeyup="filterProducts(this.value)" />
+
+<div class="cart-modal" id="cart-modal">
+  <h3>🛒 Your Cart</h3>
+  <div id="cart-items"></div>
+  <div class="cart-total">Total: ₹<span id="cart-modal-total">0</span></div>
+  <button class="checkout-btn" onclick="checkout()">Checkout</button>
+</div>
+
+<div class="container" id="product-container">
+<div class="container" id="product-container">
+  <!-- Mobiles -->
+  <div class="product" data-name="iPhone 14" data-price="79999">
+    <img src="/assets/images/iphone14.webp" alt="iPhone 14" />
+    <p class="title">iPhone 14</p>
+    <p class="rating">⭐ 4.8 (934 reviews)</p>
+    <p class="price">1 pc<br>₹79,999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Samsung Galaxy S23" data-price="74999">
+    <img src="/assets/images/s23.jpg" alt="Samsung Galaxy S23" />
+    <p class="title">Samsung Galaxy S23</p>
+    <p class="rating">⭐ 4.7 (812 reviews)</p>
+    <p class="price">1 pc<br>₹74,999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="OnePlus 11R" data-price="44999">
+    <img src="/assets/images/oneplus11r.jpg" alt="OnePlus 11R" />
+    <p class="title">OnePlus 11R</p>
+    <p class="rating">⭐ 4.6 (690 reviews)</p>
+    <p class="price">1 pc<br>₹44,999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Realme GT" data-price="29999">
+    <img src="/assets/images/realmeGT.webp" alt="Realme GT" />
+    <p class="title">Realme GT</p>
+    <p class="rating">⭐ 4.5 (582 reviews)</p>
+    <p class="price">1 pc<br>₹29,999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Vivo V27" data-price="31999">
+    <img src="/assets/images/vivov27.jpg" alt="Vivo V27" />
+    <p class="title">Vivo V27</p>
+    <p class="rating">⭐ 4.4 (450 reviews)</p>
+    <p class="price">1 pc<br>₹31,999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="iQOO Neo 7" data-price="27999">
+    <img src="/assets/images/iqooneo7.jpg" alt="iQOO Neo 7" />
+    <p class="title">iQOO Neo 7</p>
+    <p class="rating">⭐ 4.3 (374 reviews)</p>
+    <p class="price">1 pc<br>₹27,999</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <!-- Accessories -->
+  <div class="product" data-name="Power Bank 20000mAh" data-price="1899">
+    <img src="/assets/images/powerbank.jpg" alt="Power Bank" />
+    <p class="title">Power Bank 20000mAh</p>
+    <p class="rating">⭐ 4.5 (641 reviews)</p>
+    <p class="price">1 pc<br>₹1,899</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Bluetooth Earbuds" data-price="2299">
+    <img src="/assets/images/earbuds.webp" alt="Earbuds" />
+    <p class="title">Bluetooth Earbuds</p>
+    <p class="rating">⭐ 4.7 (730 reviews)</p>
+    <p class="price">1 pc<br>₹2,299</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Silicone Mobile Cover" data-price="499">
+    <img src="/assets/images/cover.jpg" alt="Mobile Cover" />
+    <p class="title">Silicone Mobile Cover</p>
+    <p class="rating">⭐ 4.4 (215 reviews)</p>
+    <p class="price">1 pc<br>₹499</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+
+  <div class="product" data-name="Type-C Fast Cable" data-price="299">
+    <img src="/assets/images/typec.jpg" alt="Type-C Cable" />
+    <p class="title">Type-C Fast Cable</p>
+    <p class="rating">⭐ 4.6 (387 reviews)</p>
+    <p class="price">1 pc<br>₹299</p>
+    <button onclick="addToCart(this)">ADD</button>
+  </div>
+</div>
+
+</div>
+
+<div class="bottom-brand-marquee">
+  <div class="marquee-track">
+  <span>📱 Apple</span>
+<span>🎧 boAt</span>
+<span>📱 Samsung</span>
+<span>🔋 Ambrane</span>
+<span>📱 Xiaomi</span>
+<span>🎧 Noise</span>
+<span>📱 Realme</span>
+<span>🔌 Portronics</span>
+<span>📱 OnePlus</span>
+<span>🔌 Mivi</span>
+<span>📱 iQOO</span>
+<span>🎧 JBL</span>
+<span>📱 Vivo</span>
+<span>🔋 Realme TechLife</span>
+<span>📱 Oppo</span>
+<span>🔋 Mi Power</span>
+<span>📱 Motorola</span>
+<span>🧰 Spigen</span>
+<span>📦 Caseology</span>
+
+  </div>
+</div>
+
+<script>
+  const countdownElement = document.getElementById("countdown");
+  const saleEndDate = new Date("July 31, 2025 23:59:59").getTime();
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = saleEndDate - now;
+    if (distance < 0) {
+      countdownElement.innerHTML = "⏳ Offer expired!";
+      return;
+    }
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  const cart = {};
+  let totalItems = 0;
+  let totalPrice = 0;
+
+  function addToCart(button) {
+    const product = button.parentElement;
+    const name = product.getAttribute("data-name");
+    const price = parseInt(product.getAttribute("data-price"));
+    if (cart[name]) {
+      cart[name].qty += 1;
+    } else {
+      cart[name] = { price: price, qty: 1 };
+    }
+    totalItems++;
+    totalPrice += price;
+    updateCartUI();
+  }
+
+  function removeItem(name) {
+    if (cart[name]) {
+      totalItems -= cart[name].qty;
+      totalPrice -= cart[name].qty * cart[name].price;
+      delete cart[name];
+      updateCartUI();
+    }
+  }
+
+  function updateCartUI() {
+    document.getElementById("cart-count").textContent = totalItems;
+    document.getElementById("cart-total").textContent = totalPrice;
+    document.getElementById("cart-modal-total").textContent = totalPrice;
+    const cartItemsContainer = document.getElementById("cart-items");
+    cartItemsContainer.innerHTML = '';
+    for (let name in cart) {
+      const item = cart[name];
+      cartItemsContainer.innerHTML += `
+        <div class="cart-item">
+          <strong>${name}</strong><br>
+          Qty: ${item.qty}<br>
+          ₹${item.price} × ${item.qty} = ₹${item.qty * item.price}
+          <button class="remove-btn" onclick="removeItem('${name}')">❌ Remove</button>
+        </div>`;
+    }
+  }
+
+  function toggleCart() {
+    const cartModal = document.getElementById("cart-modal");
+    cartModal.style.display = cartModal.style.display === "block" ? "none" : "block";
+  }
+
+  function checkout() {
+    if (totalItems === 0) {
+      alert("🛒 Your cart is empty!");
+    } else {
+      alert(`✅ Purchase complete!\nItems: ${totalItems}\nTotal: ₹${totalPrice}`);
+      for (let key in cart) delete cart[key];
+      totalItems = 0;
+      totalPrice = 0;
+      updateCartUI();
+      toggleCart();
+    }
+  }
+
+  function filterProducts(text) {
+    const search = text.toLowerCase();
+    const products = document.querySelectorAll(".product");
+    products.forEach(prod => {
+      const name = prod.getAttribute("data-name").toLowerCase();
+      prod.style.display = name.includes(search) ? "block" : "none";
+    });
+  }
+</script>
+
+</body>
+</html>
